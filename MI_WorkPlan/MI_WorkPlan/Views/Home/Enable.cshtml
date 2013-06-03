@@ -1,0 +1,46 @@
+﻿@model MI_WorkPlan.Models.tblMiProject
+
+@{
+    ViewBag.Title = "Enable Project";
+}
+
+<h2>Enable Project</h2>
+
+<h3>Are you sure you want to Enable this project?</h3>
+<fieldset>
+    <legend>@Html.DisplayFor(model => model.ProjectName)</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreatedOn)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedOn)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.UpdatedOn)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UpdatedOn)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Notes)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Notes)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Active)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Active)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Enable" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

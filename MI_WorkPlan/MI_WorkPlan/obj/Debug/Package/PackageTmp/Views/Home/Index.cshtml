@@ -1,0 +1,215 @@
+﻿@model IEnumerable<MI_WorkPlan.ViewModels.ProjectViewModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "MI Projects and Work Plan";
+}
+
+
+
+<script type="text/javascript">
+
+    $(function () {
+
+        $("td:empty").html("&nbsp;");
+
+        var chk = $('#chkActive').is(':checked');
+
+        var role = $.cookie("role");
+        //alert(role);
+        if (role == undefined) {
+            if (chk == false) {
+                $('#projectslist').load('Home/LoadMain');
+            }
+        }
+        else {
+            if (chk == false) {
+                $('#projectslist').load('Home/ShowRole?role=' + role);
+            }
+        }
+
+
+        $('#loading').ajaxStart(function () {
+            $(this).show();
+        });
+        $('#loading').ajaxStop(function () {
+            $(this).hide();
+        });
+
+        $('#staff-role').dialog({
+            autoOpen: false,
+            width: 400,
+            height: 240,
+            resizable: false,
+            modal: true,
+            title: 'Choose Role',
+            closeOnEscape: false,
+            open: function (event, ui) { $(".ui-dialog-titlebar-close", ui.dialog || ui).hide(); }
+        });
+
+        $('#search-form').dialog({
+            autoOpen: false,
+            width: 500,
+            height: 300,
+            resizable: false,
+            modal: true,
+            title: 'Search'
+        });
+
+        $('#btnSearch').click(function () {
+            $('#search-form').dialog("open");
+            return false;
+        });
+
+        $('#btnRole').click(function () {
+            $('#staff-role').dialog("open");
+            return false;
+        });
+
+
+        $('#btnSubmitSearch').click(function () {
+            var s = $('#txtSearch').val();
+            //var cboSActive = $('#chkSActive').is(':checked');
+            var cboSActive = $('#cboSActive').val();
+            var cboSCompleted = $('#cboSCompleted').val();
+            $('#projectslist').load('Home/Search?s=' + s + '&active=' + cboSActive + '&completed=' + cboSCompleted);
+            $('#txtSearch').val('');
+            $('#search-form').dialog("close");
+        });
+
+
+        $('#btnSubmitRole').click(function () {
+            var cboRole = $('#cboRole').val();
+            //$('#setRole').val(cboRole);
+            var twentymins = new Date();
+            twentymins.setMinutes(twentymins.getMinutes() + 30);
+            $.cookie('role', cboRole, { expires: twentymins });
+            $('#projectslist').load('Home/ShowRole?role=' + cboRole);
+            $('#staff-role').dialog("close");
+        });
+
+    });
+
+    function ShowInactive() {
+
+        var chk = $('#chkActive').is(':checked');
+        var role = $.cookie("role");
+        if (chk) {
+            if (role == undefined || role == "All") {
+                $('#projectslist').load('Home/ShowInActive?show=all');
+            }
+            else {
+                $('#projectslist').load('Home/ShowInActive?show=' + role);
+            }
+        }
+        else {
+            if (role == undefined || role == "All") {
+                $('#projectslist').load('Home/LoadMain');
+            }
+            else {
+                $('#projectslist').load('Home/ShowRole?role=' + role);
+            }
+        }
+    }
+    
+    function HideCompleted() {
+
+        var chk = $('#chkCompleted').is(':checked');
+        var role = $.cookie("role");
+
+        if (chk) {
+            if (role == undefined || role=="All") {
+                $('#projectslist').load('/Home/HideCompleted?show=all');
+            }
+            else {
+                $('#projectslist').load('/Home/HideCompleted?show=' + role);
+            }
+        }
+        else {
+            if (role == undefined || role == "All") {
+                $('#projectslist').load('Home/LoadMain');
+            }
+            else {
+                $('#projectslist').load('Home/ShowRole?role=' + role);
+            }
+        }
+
+    }
+
+</script>
+
+<br />
+<center>
+<p>    
+   <div style="width:800px">
+   <div style="float:left">
+    <input style="float:left" type="button" value="Create New Project" onclick="location.href='@Url.Action("Create", "Home")'") />
+
+    <span  style="float:right; margin-right:100px">      
+    <input type="checkbox" value="Show InActive Projects" id="chkActive" onclick="javascript:ShowInactive();"/>
+    &nbsp;&nbsp;
+    Inactive
+    &nbsp;&nbsp;
+    <input type="checkbox" value="Hide Completed" id="chkCompleted" onclick="javascript:HideCompleted();"/>
+    &nbsp;&nbsp;
+    Hide Completed
+    </span>
+    <span style="float:right">
+    <input type="button" value="Search" id="btnSearch" />
+    &nbsp;&nbsp;
+    <input type="button" value="Filter Role" id="btnRole" />
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    </span>
+    </div>
+    <div  id="loading" style="float:right; clear:right">
+        <img src="../../Content/ajax-loader-1.gif" style="height:30px; width:30px" />
+    </div>
+    </div>
+</p>
+<br />
+
+<div id="projectslist"></div>
+</center>
+
+<div id="search-form" title="Search by Keyword">
+<br />
+<fieldset>
+<legend>Search Projects and Tasks</legend>
+<br /><br /> 
+IsActive: <select id="cboSActive">
+<option label="Active" value="true" selected="selected"></option>
+<option label="Inactive" value="false"></option>
+<option label="All" value="all"></option>
+</select>
+<br />
+<br />
+IsCompleted: <select id="cboSCompleted">
+<option label="Completed" value="true"></option>
+<option label="Incomplete" value="false" selected="selected"></option>
+<option label="All" value="all"></option>
+</select>
+<br />
+<br />
+Keyword: <input type="text" id="txtSearch" />&nbsp;&nbsp;&nbsp;
+<input type="button" value="Search" id="btnSubmitSearch"/>
+<br />
+
+</fieldset>
+</div>
+
+<div id="staff-role" title="Filter by Staff Role">
+<br />
+<fieldset>
+<legend>Select Staff Role</legend>
+<br /><br /> 
+Role: <select id="cboRole" style="width:170px">
+<option label="All" value="All" selected="selected"></option>
+<option label="Developers" value="Developers"></option>
+<option label="Analysts" value="Analysts"></option>
+</select>
+&nbsp;&nbsp; 
+<input type="button" value="Search" id="btnSubmitRole"/>
+<br />
+<br />
+</fieldset>
+</div>

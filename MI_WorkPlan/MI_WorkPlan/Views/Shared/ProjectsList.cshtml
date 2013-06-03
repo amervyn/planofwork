@@ -1,0 +1,107 @@
+﻿@model IEnumerable<MI_WorkPlan.ViewModels.ProjectViewModel>
+
+<script type="text/javascript">
+    $("td:empty").html("&nbsp;");
+</script>
+
+<table class="projectlist">
+    <tr>
+        <th align="center">
+           Project ID
+        </th>
+        <th align="center">
+           Project Name
+        </th>
+        <th align="center">
+            Created On
+        </th>
+        <th align="center">
+           Updated On
+        </th>
+        <th align="center">
+            Notes
+        </th>
+        <th align="center">
+            TotalTasks
+        </th>
+        <th width="100px">
+        Progress
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model)
+{
+    string cl="black";
+    //if (item.Deadline < DateTime.Today)
+    //{
+    //    cl = "#CD0000";
+    //}
+    //else
+    //{
+    //    cl = "black";
+    //}
+
+    string cl2;
+    if (item.intProgress == 100)
+    {
+        cl2 = "#84CF6E";
+    }
+    else
+    {
+        cl2 = "#D2E9D2";
+    }
+    
+    <tr style="background-color:@cl2; color:@cl">
+        <td>
+            @Html.DisplayFor(modelItem => item.ProjectId)
+        </td>
+        <td width="150px" style="font-weight:bold; color:blue;">            
+            @Html.ActionLink(item.ProjectName, "Details", new { id = item.ProjectId }, new { style = "font-weight:bold; color:blue; text-decoration:none" })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedOn)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UpdatedOn)
+        </td>
+        <td style="width:230px; font-size:10pt">
+            @Html.DisplayFor(modelItem => item.Notes)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalTasks)
+        </td>
+        <td width="100px" style="text-align:left">
+                
+        @if (item.intProgress >= 0 && item.intProgress <= 25)
+        {            
+        <div style="padding:1px 1px 1px 1px; border:1px solid blue; height:15px; 
+            background-color:red; width:@item.Progress; color:White; font-size:0.8em; font-weight:bold; vertical-align:middle; text-align:center">
+        @item.Progress</div>
+        }
+        else if (item.intProgress > 25 && item.intProgress <= 50)
+        { 
+        <div style="padding:1px 1px 1px 1px; border:1px solid blue; height:15px; 
+            background-color:orange; width:@item.Progress; color:White; font-size:0.8em; font-weight:bold; vertical-align:middle; text-align:center">
+         @item.Progress</div>
+        }
+        else if (item.intProgress > 50 && item.intProgress <= 75)
+        { 
+        <div style="padding:1px 1px 1px 1px; border:1px solid blue; height:15px; 
+            background-color:blue; width:@item.Progress; color:White; font-size:0.8em; font-weight:bold; vertical-align:middle; text-align:center">
+         @item.Progress</div>
+        }
+        else if (item.intProgress > 75 && item.intProgress <= 100)
+        { 
+        <div style="padding:1px 1px 1px 1px; border:1px solid blue; height:15px; 
+            background-color:green; width:@item.Progress; color:White; font-size:0.8em; font-weight:bold; vertical-align:middle; text-align:center">
+         @item.Progress</div>
+        }
+        </td>
+    </tr>
+    
+}
+
+</table>
+
+

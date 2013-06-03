@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WebAppsModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="WebAppsModelStoreContainer">
+    <EntitySet Name="tblMiProjects" EntityType="WebAppsModel.Store.tblMiProjects" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="tblMiProjectTasks" EntityType="WebAppsModel.Store.tblMiProjectTasks" store:Type="Tables" Schema="dbo" />
+  </EntityContainer>
+  <EntityType Name="tblMiProjects">
+    <Key>
+      <PropertyRef Name="projectId" />
+    </Key>
+    <Property Name="projectId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="ProjectName" Type="varchar" Nullable="false" MaxLength="50" />
+    <Property Name="Role" Type="varchar" Nullable="false" MaxLength="50" />
+    <Property Name="CreatedOn" Type="smalldatetime" Nullable="false" />
+    <Property Name="UpdatedOn" Type="smalldatetime" Nullable="false" />
+    <Property Name="Notes" Type="varchar" />
+    <Property Name="Active" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblMiProjectTasks">
+    <Key>
+      <PropertyRef Name="taskId" />
+    </Key>
+    <Property Name="taskId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="projectId" Type="int" Nullable="false" />
+    <Property Name="TaskName" Type="varchar" Nullable="false" MaxLength="200" />
+    <Property Name="Priority" Type="int" Nullable="false" />
+    <Property Name="Progress" Type="int" Nullable="false" />
+    <Property Name="CreatedOn" Type="smalldatetime" Nullable="false" />
+    <Property Name="UpdatedOn" Type="smalldatetime" Nullable="false" />
+    <Property Name="AssignedTo" Type="varchar" MaxLength="50" />
+    <Property Name="Deadline" Type="smalldatetime" />
+    <Property Name="Notes" Type="varchar" />
+    <Property Name="Active" Type="bit" Nullable="false" />
+  </EntityType>
+  <Function Name="spWorkplan_sSearch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="searchstring" Type="varchar" Mode="In" />
+  </Function>
+</Schema>

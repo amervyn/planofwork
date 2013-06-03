@@ -1,0 +1,74 @@
+﻿@model MI_WorkPlan.Models.tblMiProjectTask
+
+@{
+    ViewBag.Title = "Disable Task";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Disable Task</h2>
+
+<h3>Are you sure you want to Disable this Task?</h3>
+<fieldset>
+    <legend> @Html.DisplayFor(model => model.TaskName)</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Priority)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Priority)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Progress)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Progress)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreatedOn)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedOn)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.UpdatedOn)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UpdatedOn)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.AssignedTo)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AssignedTo)
+    </div>
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Deadline)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Deadline)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Notes)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Notes)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Active)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Active)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Disable" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

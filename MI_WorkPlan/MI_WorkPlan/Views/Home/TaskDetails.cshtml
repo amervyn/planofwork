@@ -1,0 +1,64 @@
+﻿@model MI_WorkPlan.Models.tblMiProjectTask
+@{
+    ViewBag.Title = "TaskDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div style="float: right; padding-right: 500px">
+    @Html.ActionLink("Edit", "EditTask", new { id = Model.taskId, projid = Model.projectId }, new { @style = "font-weight:bold; font-size:12pt" })&nbsp;&nbsp;|&nbsp;&nbsp;
+    @if (Model.Active == true)
+    { 
+        @Html.ActionLink("Disable", "DisableTask", new { id = Model.taskId, projid = Model.projectId }, new { @style = "font-weight:bold; font-size:12pt" })
+    }
+    else
+    { 
+        @Html.ActionLink("Enable", "EnableTask", new { id = Model.taskId, projid = Model.projectId }, new { @style = "font-weight:bold; font-size:12pt" })
+    }
+</div>
+<h2 style="clear:left">Task Details</h2>
+<fieldset>
+    <legend>@Html.DisplayFor(model => model.TaskName)</legend>
+    <div style="float: left; margin-right: 100px">
+        @Html.HiddenFor(model => model.taskId)
+        <div class="display-label">
+            @Html.DisplayNameFor(model => model.Priority)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.Priority)
+        </div>
+        <div class="display-label">
+            @Html.DisplayNameFor(model => model.Progress)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.Progress)
+        </div>
+        <div class="display-label">
+            @Html.DisplayNameFor(model => model.AssignedTo)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.AssignedTo)
+        </div>
+        <div class="display-label">
+            @Html.DisplayNameFor(model => model.Deadline)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.Deadline)
+        </div>
+        <div class="display-label">
+            @Html.DisplayNameFor(model => model.Active)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.Active)
+        </div>
+    </div>
+    <div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Notes)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Notes, new { @style = "width:500px; height:400px; overflow-y:scroll;font-family: Segoe UI", @readonly = "true" })
+            @Html.ValidationMessageFor(model => model.Notes)
+        </div>
+    </div>
+</fieldset>
+
+@Html.ActionLink("Back to Task List", "Details", new {id=Model.projectId})

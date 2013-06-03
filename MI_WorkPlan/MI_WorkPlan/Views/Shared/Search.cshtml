@@ -1,0 +1,92 @@
+﻿@model IEnumerable<MI_WorkPlan.Models.Workplan_Search_Result>
+
+<link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
+<script src="../../Scripts/jquery-1.7.1.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $("td:empty").html("&nbsp;");
+    });
+</script>
+
+<h2 style="text-align:left">Search Results</h2>
+
+<table class="tasklist">
+    <tr>
+        <th>
+            Project ID
+        </th>
+        <th>
+            Project Name
+        </th>        
+        <th>
+            Task ID
+        </th>
+        <th>
+            Task Name
+        </th>
+        <th>
+            Assigned To
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Progress)
+        </th>
+        <th>
+            Project Notes
+        </th>
+        <th>
+            Task Notes
+        </th>
+        <th>
+            Task Active
+        </th>
+        <th>
+            Project Active
+        </th>
+        <th>
+            Deadline
+        </th>
+        <th>
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        string formattedDeadline = item.Deadline.HasValue ? item.Deadline.Value.ToShortDateString() : "";
+        
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectID)
+            </td>
+            <td style="text-align:left">
+                @Html.ActionLink(item.ProjectName, "Details", new { id = item.ProjectID }, new { style = "font-weight:bold; color:blue; text-decoration:none" })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TaskID)
+            </td>
+            <td style="text-align:left">
+                @Html.ActionLink(item.TaskName, "TaskDetails", new { id = item.TaskID }, new { style = "font-weight:bold; color:green; text-decoration:none" })
+            </td>            
+            <td>
+                @Html.DisplayFor(modelItem => item.AssignedTo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Progress)
+            </td>
+            <td style="text-align:left">
+                @Html.DisplayFor(modelItem => item.ProjectNotes)
+            </td>
+            <td style="text-align:left">
+                @Html.DisplayFor(modelItem => item.TaskNotes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TaskActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectActive)
+            </td>                        
+            <td style="text-align:left">            
+                @Html.DisplayFor(modelItem => formattedDeadline)
+            </td>
+        </tr>
+    }
+</table>

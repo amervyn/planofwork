@@ -1,0 +1,320 @@
+﻿@model MI_WorkPlan.ViewModels.ProjectViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Details";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("td:empty").html("&nbsp;");
+
+        $('#move-task').dialog({
+            autoOpen: false,
+            width: 500,
+            height: 400,
+            resizable: false,
+            modal: true,
+            title: 'Move Task'
+        });
+
+        $('#show-notes').dialog({
+            autoOpen: false,
+            width: 500,
+            height: 450,
+            resizable: false,
+            modal: true,
+            title: 'Task Notes'
+        });
+
+    });
+
+//        var url = '@Url.Content("/Home/GetProjectList")';
+//        var projecstjson;
+
+//        $.getJSON(url,
+//        null,
+//        function (data) {
+//            projecstjson = data;
+//        }
+//            );
+
+//        $(projecstjson).each(function () {
+
+//            //alert(this.ProjectId + ', ' + this.ProjectName);
+//            $('#cboProjects').append('<option value=' + this.ProjectId + '>' + this.ProjectName + '</option>');
+
+
+//        });
+
+
+
+    function ProcessRecord(taskid, projectid, taskname) {
+
+      
+        //$('#projectslist').load('Home/GetProjectList');
+
+
+        $('#move-task').dialog("open");
+
+        $('#txtTaskName').text(taskname);
+ 
+        $('#btnUpdateTask').click(function () {
+            var newid = $('#cboProjects').val();
+            var url = '@Url.Content("/Home/MoveProject")';
+            url = url + '?oldid=' + projectid + '&newid=' + newid + '&taskid=' + taskid;
+            $.post(url, null,
+                function (data) {
+                    window.location=data.url;
+                }
+                );
+
+            $('#move-task').dialog("close");
+        });
+
+    }
+
+
+    function ShowNotes(id,taskname) {
+        $('#show-notes').dialog("open");        
+        var url = '@Url.Content("/Home/TaskNotes")';
+        url = url + '?id=' + id;
+        $.get(url, null,
+                function (data) {
+                    $('#txtNotes').val(data.notes);
+                    $('#txtTask').text(data.taskname);
+                }
+                );
+    }
+
+    function ProcessActiveToggle(taskid, flag, projid) {
+    
+        var url = '@Url.Content("/Home/ProcessActiveToggle")';
+        url = url + '?taskid=' + taskid + '&flag=' + flag + '&projid=' + projid;
+        $.post(url, null,
+                function (data) {
+                    window.location = data.url;
+                }
+                );
+
+    }
+</script>
+
+<div id="move-task" title="Move Task to Another Project">
+<br />
+<fieldset>
+<br /><br /> 
+<label style="font-size:12pt; font-weight:bold" id="txtTaskName"></label>
+<br /><br /><br />
+Select New Project: <br /><br /> 
+@Html.DropDownList("cboProjects",new SelectList(ViewBag.projects,"ProjectId","ProjectName"),new {@id="cboProjects"})
+<br />
+<br /><br /><br />
+<input type="button" value="Update" id="btnUpdateTask"/>
+<br />
+
+</fieldset>
+</div>
+
+
+<div id="show-notes" title="Task Notes and Dependencies">
+<br />
+<fieldset>
+Notes for Task: <label style="font-size:12pt; font-weight:bold" id="txtTask"></label>
+<br /><br />
+<textarea readonly="readonly" id="txtNotes" style="height:200px; width:400px; font-size:10pt; overflow-y:scroll" rows="50"></textarea>
+<br />
+<br />
+Task Dependencies:
+<br />
+<input type="text" id="txtDependencies" />
+<br />
+</fieldset>
+</div>
+
+
+
+<div style="float: right; padding-right: 400px">
+    @Html.ActionLink("Edit Project", "Edit", new { id = Model.ProjectId }, new { @style = "font-weight:bold; font-size:12pt" })
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    @if (Model.Active == "Yes")
+    { 
+        @Html.ActionLink("Disable Project", "Disable", new { id = Model.ProjectId }, new { @style = "font-weight:bold; font-size:12pt" })
+    }
+    else
+    { 
+        @Html.ActionLink("Enable Project", "Enable", new { id = Model.ProjectId }, new { @style = "font-weight:bold; font-size:12pt" })
+    }
+</div>
+<h2 style="color: Green; clear: left">@Html.DisplayFor(model => model.ProjectName)</h2>
+<fieldset style="width: 800px">
+    <legend>Project Details</legend>
+    <br />
+    <table style="float: left; margin-right: 50px">
+        <tr>
+            <td style="padding-right: 100px">
+                <div class="display-label">
+                    @Html.DisplayNameFor(model => model.CreatedOn)
+                </div>
+                <div class="display-field">
+                    @Html.DisplayFor(model => model.CreatedOn)
+                </div>
+                <div class="display-label">
+                    @Html.DisplayNameFor(model => model.UpdatedOn)
+                </div>
+                <div class="display-field">
+                    @Html.DisplayFor(model => model.UpdatedOn)
+                </div>
+            </td>
+            <td>
+                <div class="display-label">
+                    Progress
+                </div>
+                <div style="width: 150px; margin-top: 10px; text-align: left; border: 1px solid black;
+                    height: 15px">
+                    @if (Model.intProgress >= 0 && Model.intProgress <= 25)
+                    { 
+                        <div style="height:15px; 
+            background-color:red; width:@Model.Progress; color:White; font-size:0.8em; vertical-align:middle; text-align:center">
+                            @Model.Progress</div>
+                    }
+                    else if (Model.intProgress > 25 && Model.intProgress <= 50)
+                    { 
+                        <div style="height:15px; 
+            background-color:orange; width:@Model.Progress; color:White; font-size:0.8em; vertical-align:middle; text-align:center">
+                            @Model.Progress</div>
+                    }
+                    else if (Model.intProgress > 50 && Model.intProgress <= 75)
+                    { 
+                        <div style="height:15px; 
+            background-color:blue; width:@Model.Progress; color:White; font-size:0.8em; vertical-align:middle; text-align:center">
+                            @Model.Progress</div>
+                    }
+                    else if (Model.intProgress > 75 && Model.intProgress <= 100)
+                    { 
+                        <div style="height:15px; 
+            background-color:green; width:@Model.Progress; color:White; font-size:0.8em; vertical-align:middle; text-align:center">
+                            @Model.Progress</div>
+                    }
+                </div>
+                <div class="display-label">
+                    @Html.DisplayNameFor(model => model.Active)
+                </div>
+                <div class="display-field">
+                    @Html.DisplayFor(model => model.Active)
+                </div>
+            </td>
+        </tr>
+    </table>
+    <p>
+        <u>ADDITIONAL NOTES:</u></p>
+    <textarea name="Project Notes" title="Project Notes" readonly="true" style="width: 300px;
+        height: 200px; font-family: Segoe UI; border:none; border-color:transparent; overflow:auto; border-style:none">@Model.Notes</textarea>
+</fieldset>
+<br />
+<h2>
+    Related Tasks</h2>
+<p>
+    @Html.ActionLink("Create New Task", "CreateTask", new { projid = Model.ProjectId })
+</p>
+<table class="tasklist">
+    <tr>
+        <th>
+            Task ID
+        </th>
+        <th>
+            Task Name
+        </th>
+        <th>
+            Assigned To
+        </th>
+        <th>
+            Created On
+        </th>
+        <th>
+            Updated On
+        </th>
+        <th>
+            Deadline
+        </th>
+        <th>
+            Priority
+        </th>
+        <th>
+            Progress
+        </th>
+        <th>
+            Notes
+        </th>
+        <th>
+            Active
+        </th>
+    </tr>
+    @foreach (var item in Model.ProjectTasks)
+    {
+
+        string cl;
+        //string tasknotes = string.IsNullOrEmpty(item.Notes) ? "" : item.Notes;
+        if (item.Progress == 100)
+        {
+            cl = "#84CF6E";
+        }
+        else
+        {
+            cl = "#D2E9D2";
+        }
+        
+        <tr style="background-color:@cl">
+            <td style="width: 40px">
+                @Html.DisplayFor(modelItem => item.TaskId)
+            </td>
+            <td width="150px" style="font-weight: bold; color: #330000; text-align:left">                
+                @Html.DisplayFor(modelItem=>item.TaskName)
+            </td>
+            <td style="width: 80px">
+                @Html.DisplayFor(modelItem => item.AssignedTo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedOn)
+            </td>
+            <td style="width: 85px">
+                @Html.DisplayFor(modelItem => item.Deadline)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Priority)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Progress)%
+            </td>
+            <td style="width: 210px; font-size: 10pt; text-align:justify">
+               @if (!string.IsNullOrEmpty(item.Notes))
+               {
+               <a style = "font-size:10pt; text-decoration:none; color:black" href="" id="lnkShowNotes" onclick="javascript:ShowNotes(@item.TaskId); return false;">@Html.DisplayFor(modelItem=>item.Notes)             
+               <span style="font-size:9pt; text-decoration:underline; color:Blue">more</span>
+               </a>  
+               }
+               
+            </td>
+            @if (item.Active == "Yes")
+            { 
+                <td>                   
+                    <a href="" id="lnkToggleActive" title="Toggle Active State" style="color:#024A00; font-weight:bold" onclick="javascript:ProcessActiveToggle(@item.TaskId,false,@item.ProjectId); return false;">@Html.DisplayFor(modelItem => item.Active)</a>
+                </td>
+            }
+            else
+            { 
+                <td>                    
+                    <a href="" id="lnkToggleActive1" style="color: Red; font-weight: bold" title="Toggle Active State" onclick="javascript:ProcessActiveToggle(@item.TaskId,true,@item.ProjectId); return false;">@Html.DisplayFor(modelItem => item.Active)</a>
+                </td>
+            }
+            <td>
+             &nbsp;&nbsp; <a style = "font-weight:bold; font-size:10pt" href="" id="btnMoveTask" onclick="javascript:ProcessRecord(@item.TaskId,@item.ProjectId,'@item.TaskName'); return false;">Move</a>&nbsp;&nbsp;             
+            </td>
+            <td>            
+             &nbsp;&nbsp; @Html.ActionLink("Edit", "EditTask", new { id = item.TaskId, projid = Model.ProjectId }, new { @style = "font-weight:bold; font-size:10pt" }) &nbsp;&nbsp;
+            </td>
+        </tr>
+    }
+</table>

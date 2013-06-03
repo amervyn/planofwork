@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WebAppsModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="WebAppsModelStoreContainer">
+    <EntitySet Name="tblMiProjects" EntityType="WebAppsModel.Store.tblMiProjects" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="tblMiProjectTasks" EntityType="WebAppsModel.Store.tblMiProjectTasks" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_tblMiProjectTasks_tblMiProjects" Association="WebAppsModel.Store.FK_tblMiProjectTasks_tblMiProjects">
+      <End Role="tblMiProjects" EntitySet="tblMiProjects" />
+      <End Role="tblMiProjectTasks" EntitySet="tblMiProjectTasks" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="tblMiProjects">
+    <Key>
+      <PropertyRef Name="projectId" />
+    </Key>
+    <Property Name="projectId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="ProjectName" Type="varchar" MaxLength="50" />
+    <Property Name="Priority" Type="int" />
+    <Property Name="CreatedOn" Type="smalldatetime" />
+    <Property Name="UpdatedOn" Type="smalldatetime" />
+    <Property Name="Deadline" Type="smalldatetime" />
+    <Property Name="Notes" Type="varchar" />
+    <Property Name="Active" Type="bit" />
+  </EntityType>
+  <EntityType Name="tblMiProjectTasks">
+    <Key>
+      <PropertyRef Name="taskId" />
+    </Key>
+    <Property Name="taskId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="projectId" Type="int" />
+    <Property Name="TaskName" Type="varchar" MaxLength="200" />
+    <Property Name="Priority" Type="int" />
+    <Property Name="Progress" Type="int" />
+    <Property Name="CreatedOn" Type="smalldatetime" />
+    <Property Name="UpdatedOn" Type="smalldatetime" />
+    <Property Name="AssignedTo" Type="varchar" MaxLength="50" />
+    <Property Name="DateCommenced" Type="smalldatetime" />
+    <Property Name="DateCompleted" Type="smalldatetime" />
+    <Property Name="Notes" Type="varchar" />
+    <Property Name="Active" Type="bit" />
+  </EntityType>
+  <Association Name="FK_tblMiProjectTasks_tblMiProjects">
+    <End Role="tblMiProjects" Type="WebAppsModel.Store.tblMiProjects" Multiplicity="0..1" />
+    <End Role="tblMiProjectTasks" Type="WebAppsModel.Store.tblMiProjectTasks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblMiProjects">
+        <PropertyRef Name="projectId" />
+      </Principal>
+      <Dependent Role="tblMiProjectTasks">
+        <PropertyRef Name="projectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

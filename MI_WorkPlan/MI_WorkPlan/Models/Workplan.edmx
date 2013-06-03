@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="WebAppsModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="WebAppsModelStoreContainer">
+          <EntitySet Name="tblMiProjects" EntityType="WebAppsModel.Store.tblMiProjects" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="tblMiProjectTasks" EntityType="WebAppsModel.Store.tblMiProjectTasks" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="tblMiProjects">
+          <Key>
+            <PropertyRef Name="projectId" />
+          </Key>
+          <Property Name="projectId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ProjectName" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Role" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CreatedOn" Type="smalldatetime" Nullable="false" />
+          <Property Name="UpdatedOn" Type="smalldatetime" Nullable="false" />
+          <Property Name="Notes" Type="varchar" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblMiProjectTasks">
+          <Key>
+            <PropertyRef Name="taskId" />
+          </Key>
+          <Property Name="taskId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="projectId" Type="int" Nullable="false" />
+          <Property Name="TaskName" Type="varchar" Nullable="false" MaxLength="200" />
+          <Property Name="Priority" Type="int" Nullable="false" />
+          <Property Name="Progress" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="smalldatetime" Nullable="false" />
+          <Property Name="UpdatedOn" Type="smalldatetime" Nullable="false" />
+          <Property Name="AssignedTo" Type="varchar" MaxLength="50" />
+          <Property Name="Deadline" Type="smalldatetime" />
+          <Property Name="Notes" Type="varchar" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
+        <Function Name="spWorkplan_sSearch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="searchstring" Type="varchar" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WebAppsModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="WebAppsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblMiProjects" EntityType="WebAppsModel.tblMiProject" />
+          <EntitySet Name="tblMiProjectTasks" EntityType="WebAppsModel.tblMiProjectTask" />
+          <FunctionImport Name="Workplan_Search" ReturnType="Collection(WebAppsModel.Workplan_Search_Result)">
+          <Parameter Name="searchstring" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="tblMiProject">
+          <Key>
+            <PropertyRef Name="projectId" />
+          </Key>
+          <Property Name="projectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProjectName" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Nullable="false" />
+          <Property Name="Notes" Type="String" MaxLength="8000" Unicode="false" FixedLength="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Type="String" Name="Role" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tblMiProjectTask">
+          <Key>
+            <PropertyRef Name="taskId" />
+          </Key>
+          <Property Name="taskId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="projectId" Type="Int32" Nullable="false" />
+          <Property Name="TaskName" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="Priority" Type="Int32" Nullable="false" />
+          <Property Name="Progress" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Nullable="false" />
+          <Property Name="AssignedTo" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Deadline" Type="DateTime" />
+          <Property Name="Notes" Type="String" MaxLength="8000" Unicode="false" FixedLength="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <ComplexType Name="Workplan_Search_Result">
+          <Property Type="String" Name="ProjectName" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="ProjectID" Nullable="false" />
+          <Property Type="String" Name="TaskName" Nullable="false" MaxLength="200" />
+          <Property Type="Int32" Name="TaskID" Nullable="false" />
+          <Property Type="String" Name="AssignedTo" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Progress" Nullable="false" />
+          <Property Type="String" Name="ProjectNotes" Nullable="true" MaxLength="8000" />
+          <Property Type="String" Name="TaskNotes" Nullable="true" MaxLength="8000" />
+          <Property Type="Boolean" Name="TaskActive" Nullable="false" />
+          <Property Type="Boolean" Name="ProjectActive" Nullable="false" />
+          <Property Type="DateTime" Name="Deadline" Nullable="true" Precision="16" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WebAppsModelStoreContainer" CdmEntityContainer="WebAppsEntities">
+          <EntitySetMapping Name="tblMiProjects"><EntityTypeMapping TypeName="WebAppsModel.tblMiProject"><MappingFragment StoreEntitySet="tblMiProjects">
+            <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="projectId" ColumnName="projectId" />
+            <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+            <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+            <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+            <ScalarProperty Name="Notes" ColumnName="Notes" />
+            <ScalarProperty Name="Active" ColumnName="Active" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="tblMiProjectTasks"><EntityTypeMapping TypeName="WebAppsModel.tblMiProjectTask"><MappingFragment StoreEntitySet="tblMiProjectTasks">
+            <ScalarProperty Name="taskId" ColumnName="taskId" />
+            <ScalarProperty Name="projectId" ColumnName="projectId" />
+            <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+            <ScalarProperty Name="Priority" ColumnName="Priority" />
+            <ScalarProperty Name="Progress" ColumnName="Progress" />
+            <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+            <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+            <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+            <ScalarProperty Name="Deadline" ColumnName="Deadline" />
+            <ScalarProperty Name="Notes" ColumnName="Notes" />
+            <ScalarProperty Name="Active" ColumnName="Active" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Workplan_Search" FunctionName="WebAppsModel.Store.spWorkplan_sSearch">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WebAppsModel.Workplan_Search_Result">
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+                <ScalarProperty Name="Progress" ColumnName="Progress" />
+                <ScalarProperty Name="ProjectNotes" ColumnName="ProjectNotes" />
+                <ScalarProperty Name="TaskNotes" ColumnName="TaskNotes" />
+                <ScalarProperty Name="TaskActive" ColumnName="TaskActive" />
+                <ScalarProperty Name="ProjectActive" ColumnName="ProjectActive" />
+                <ScalarProperty Name="Deadline" ColumnName="Deadline" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="Workplan">
+        <EntityTypeShape EntityType="WebAppsModel.tblMiProject" Width="1.5" PointX="0.75" PointY="0.75" Height="1.9210009765625" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebAppsModel.tblMiProjectTask" Width="1.5" PointX="2.75" PointY="0.75" Height="2.7427376302083326" IsExpanded="true" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

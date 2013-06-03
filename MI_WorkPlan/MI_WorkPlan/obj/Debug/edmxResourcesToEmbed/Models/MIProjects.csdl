@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WebAppsModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+  <EntityContainer Name="WebAppsEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tblMiProjects" EntityType="WebAppsModel.tblMiProject" />
+    <EntitySet Name="tblMiProjectTasks" EntityType="WebAppsModel.tblMiProjectTask" />
+    <AssociationSet Name="FK_tblMiProjectTasks_tblMiProjects" Association="WebAppsModel.FK_tblMiProjectTasks_tblMiProjects">
+      <End Role="tblMiProjects" EntitySet="tblMiProjects" />
+      <End Role="tblMiProjectTasks" EntitySet="tblMiProjectTasks" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="tblMiProject">
+    <Key>
+      <PropertyRef Name="projectId" />
+    </Key>
+    <Property Name="projectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProjectName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="Priority" Type="Int32" />
+    <Property Name="CreatedOn" Type="DateTime" />
+    <Property Name="UpdatedOn" Type="DateTime" />
+    <Property Name="Deadline" Type="DateTime" />
+    <Property Name="Notes" Type="String" MaxLength="8000" Unicode="false" FixedLength="false" />
+    <Property Name="Active" Type="Boolean" />
+    <NavigationProperty Name="tblMiProjectTasks" Relationship="WebAppsModel.FK_tblMiProjectTasks_tblMiProjects" FromRole="tblMiProjects" ToRole="tblMiProjectTasks" />
+  </EntityType>
+  <EntityType Name="tblMiProjectTask">
+    <Key>
+      <PropertyRef Name="taskId" />
+    </Key>
+    <Property Name="taskId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="projectId" Type="Int32" />
+    <Property Name="TaskName" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+    <Property Name="Priority" Type="Int32" />
+    <Property Name="Progress" Type="Int32" />
+    <Property Name="CreatedOn" Type="DateTime" />
+    <Property Name="UpdatedOn" Type="DateTime" />
+    <Property Name="AssignedTo" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="DateCommenced" Type="DateTime" />
+    <Property Name="DateCompleted" Type="DateTime" />
+    <Property Name="Notes" Type="String" MaxLength="8000" Unicode="false" FixedLength="false" />
+    <Property Name="Active" Type="Boolean" />
+    <NavigationProperty Name="tblMiProject" Relationship="WebAppsModel.FK_tblMiProjectTasks_tblMiProjects" FromRole="tblMiProjectTasks" ToRole="tblMiProjects" />
+  </EntityType>
+  <Association Name="FK_tblMiProjectTasks_tblMiProjects">
+    <End Role="tblMiProjects" Type="WebAppsModel.tblMiProject" Multiplicity="0..1" />
+    <End Role="tblMiProjectTasks" Type="WebAppsModel.tblMiProjectTask" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblMiProjects">
+        <PropertyRef Name="projectId" />
+      </Principal>
+      <Dependent Role="tblMiProjectTasks">
+        <PropertyRef Name="projectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WebAppsModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+  <EntityContainer Name="WebAppsEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tblMiProjects" EntityType="WebAppsModel.tblMiProject" />
+    <EntitySet Name="tblMiProjectTasks" EntityType="WebAppsModel.tblMiProjectTask" />
+    <FunctionImport Name="Workplan_Search" ReturnType="Collection(WebAppsModel.Workplan_Search_Result)">
+      <Parameter Name="searchstring" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+  <EntityType Name="tblMiProject">
+    <Key>
+      <PropertyRef Name="projectId" />
+    </Key>
+    <Property Name="projectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProjectName" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="CreatedOn" Type="DateTime" Nullable="false" />
+    <Property Name="UpdatedOn" Type="DateTime" Nullable="false" />
+    <Property Name="Notes" Type="String" MaxLength="8000" Unicode="false" FixedLength="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <Property Type="String" Name="Role" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblMiProjectTask">
+    <Key>
+      <PropertyRef Name="taskId" />
+    </Key>
+    <Property Name="taskId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="projectId" Type="Int32" Nullable="false" />
+    <Property Name="TaskName" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+    <Property Name="Priority" Type="Int32" Nullable="false" />
+    <Property Name="Progress" Type="Int32" Nullable="false" />
+    <Property Name="CreatedOn" Type="DateTime" Nullable="false" />
+    <Property Name="UpdatedOn" Type="DateTime" Nullable="false" />
+    <Property Name="AssignedTo" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="Deadline" Type="DateTime" />
+    <Property Name="Notes" Type="String" MaxLength="8000" Unicode="false" FixedLength="false" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <ComplexType Name="Workplan_Search_Result">
+    <Property Type="String" Name="ProjectName" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="ProjectID" Nullable="false" />
+    <Property Type="String" Name="TaskName" Nullable="false" MaxLength="200" />
+    <Property Type="Int32" Name="TaskID" Nullable="false" />
+    <Property Type="String" Name="AssignedTo" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="Progress" Nullable="false" />
+    <Property Type="String" Name="ProjectNotes" Nullable="true" MaxLength="8000" />
+    <Property Type="String" Name="TaskNotes" Nullable="true" MaxLength="8000" />
+    <Property Type="Boolean" Name="TaskActive" Nullable="false" />
+    <Property Type="Boolean" Name="ProjectActive" Nullable="false" />
+    <Property Type="DateTime" Name="Deadline" Nullable="true" Precision="16" />
+  </ComplexType>
+</Schema>

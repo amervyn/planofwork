@@ -1,0 +1,168 @@
+﻿@model MI_WorkPlan.Models.tblMiProjectTask
+
+@{
+    ViewBag.Title = "EditTask";
+    Layout = "~/Views/Shared/_Layout.cshtml";    
+}
+
+<script src="../../Scripts/jquery-1.7.1.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery-ui-1.8.20.js" type="text/javascript"></script>
+<link href="../../Content/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="../../Content/themes/base/jquery.ui.dialog.css" rel="stylesheet" type="text/css" />
+
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#add-user').dialog({
+            autoOpen: false,
+            width: 350,
+            height: 390,
+            resizable: false,
+            modal: true,
+            title: 'Add Person'
+        });
+
+        $('#btnAssign').click(function () {
+            $('#add-user').dialog("open");
+            var pers = $('#txtAssigned').val();
+            pers = pers.toString().replace(/[\s/\s]/g, ',');
+            pers=pers.toString().replace(/\,\,\,/g, ',');
+            $('#lblExistingPersons').val(pers.toString());
+            return false;
+        });
+
+        $('#btnSubmitPersons').click(function () {
+            var pers = $('#lstPersons').val();
+            pers = pers.toString().replace(/\,/g, ' / ');
+            $('#txtAssigned').val(pers);
+            $('#lstPersons').val('');
+            $('#add-user').dialog("close");
+        });
+
+    });
+
+</script>
+
+<span style="font-size:16pt; font-weight:bold">Edit Task for: </span><span style="font-size: 14pt;color:green; font-weight:bold; font-family:Segoe UI">@ViewData["projname"]</span>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(m=>m.CreatedOn)
+    <fieldset>
+        <legend>@Html.DisplayFor(model => model.TaskName)</legend>
+
+         <div style="float:left; margin-right:100px">
+
+        @Html.HiddenFor(model => model.taskId)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TaskName)
+        </div>
+        <div style="margin: 0.5em 0 0 0; width:250px">
+            @Html.TextBoxFor(model => model.TaskName, new { @style = "width:250px" })<br />                       
+            @Html.ValidationMessageFor(model => model.TaskName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Priority)
+        </div>
+        <div style="margin: 0.5em 0 0 0; width:250px">
+            @Html.TextBoxFor(model => model.Priority, new { @style = "width:30px" }) <i>(1-3)</i><br />
+            @Html.ValidationMessageFor(model => model.Priority)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Progress)
+        </div>
+        <div style="margin: 0.5em 0 0 0; width:250px">
+            @Html.TextBoxFor(model => model.Progress, new { @style = "width:30px" }) <i>(0-100)</i><br />
+            @Html.ValidationMessageFor(model => model.Progress)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.AssignedTo)
+        </div>
+        <div class="editor-field">
+           @Html.TextBoxFor(m => m.AssignedTo, new { @readonly = "readonly", @id = "txtAssigned", @style = "width:150px" })  &nbsp; <input id="btnAssign" value="Add" type="button" />           
+            @Html.ValidationMessageFor(model => model.AssignedTo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Deadline)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Deadline)
+            @Html.ValidationMessageFor(model => model.Deadline)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Active)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Active)
+            @Html.ValidationMessageFor(model => model.Active)
+        </div>
+
+        </div>
+
+        <div>
+        
+                     <div class="editor-label">
+             @Html.LabelFor(model => model.Notes)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Notes, new { style = "width:500px; height:400px; overflow-y:scroll" })
+            @Html.ValidationMessageFor(model => model.Notes)
+        </div>
+
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to Task List", "Details", new { id = Model.projectId })
+</div>
+
+
+<div id="add-user"">
+<br />
+Original Values: <br />
+<input type=text id="lblExistingPersons" style="border-width:0; font-size:8pt; width:300px" readonly="readonly" />
+<br />
+<br />
+<center>
+<select multiple="multiple" id="lstPersons" style="width:230px; height:200px; overflow-y:scroll">
+<option label="All Developers" value="Developers" />
+<option label="Anto Mervyn" value="AntoMervyn" />
+<option label="John Cameron" value="JohnCameron" />
+<option label="Daniel Smith" value="DanielSmith" />
+<option label="James Cook" value="JamesCook" />
+<option label="Michael Damiani" value="MichaelDamiani" />
+<option label="Vincent Adegoke" value="VincentAdegoke" />
+<option label="All Analysts" value="Analysts" />
+<option label="Huma" value="Huma" />
+<option label="Lisa" value="Lisa" />
+<option label="Tony" value="Tony" />
+<option label="Dave" value="Dave" />
+<option label="Karen" value="Karen" />
+<option label="Lola" value="Lola" />
+<option label="John Cornwell" value="JohnCornwell" />
+<option label="Mita" value="Mita" />
+</select>
+<br />
+<br />
+<input type="button" value="Submit" id="btnSubmitPersons"/>
+<br />
+</center>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

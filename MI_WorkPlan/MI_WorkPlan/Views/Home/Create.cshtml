@@ -1,0 +1,63 @@
+﻿@model MI_WorkPlan.Models.tblMiProject
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create New Project</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+<div style="float:left; margin-right:100px">
+        <div class="editor-label">
+            Project Name
+        </div>
+        <div  style="margin: 0.5em 0 0 0; width:250px">
+            @Html.TextBoxFor(model => model.ProjectName, new { style = "width:250px"})<br />
+            @Html.ValidationMessageFor(model => model.ProjectName)
+        </div>
+        <br /><br />
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Active)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Active)
+            @Html.ValidationMessageFor(model => model.Active)
+        </div>
+        <br />
+        <div class="editor-label">
+            @Html.LabelFor(model=>model.Role)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Role, new SelectList(ViewBag.Roles,"JobRole","JobRole"), "--Select Role--", new { id = "cboRole" })
+            @Html.ValidationMessageFor(model => model.Role)
+        </div>
+        <br />
+        <br />
+        <p>            
+            <input type="submit" value="Save Project" />
+        </p>
+</div>
+
+   <div>     
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Notes)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Notes, new { style = "width:400px; height:200px; overflow-y:scroll" })
+            @Html.ValidationMessageFor(model => model.Notes)
+        </div>
+        </div>
+
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,83 @@
+﻿@model MI_WorkPlan.Models.tblMiProject
+@{
+    ViewBag.Title = "Edit";
+    
+}
+
+<script type="text/javascript">
+    $(function () {
+
+        var role = $("#hiddenRole").val();        
+        $("#cboRole").val(role);
+
+    });
+
+</script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <h2 style="color:Green">@Html.DisplayFor(model => model.ProjectName)</h2>
+    @Html.HiddenFor(m => m.CreatedOn)
+    <fieldset>
+        <legend>Edit Project Details</legend>
+          <div style="float:left; margin-right:100px">
+        <div class="editor-label">
+           @Html.HiddenFor(model => model.projectId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ProjectName)
+        </div>
+        <div style="margin: 0.5em 0 0 0; width:250px">
+            @Html.TextBoxFor(model => model.ProjectName, new { style = "width:250px" })<br />
+            @Html.ValidationMessageFor(model => model.ProjectName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Active)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Active)
+            @Html.ValidationMessageFor(model => model.Active)
+        </div>
+        @Html.HiddenFor(model => model.Role, new { id = "hiddenRole" })
+         <div class="editor-label">
+            @Html.LabelFor(model=>model.Role)
+        </div>
+        <div class="editor-field">
+            <select name="cboRole" id="cboRole">
+            <option label="All" value="All" selected="selected"></option>
+            <option label="Analysts" value="Analysts"></option>
+            <option label="Developers" value="Developers"></option>
+            </select>
+            @Html.ValidationMessageFor(model => model.Role)
+        </div>
+
+        </div>
+
+        <div>
+        
+                <div class="editor-label">
+             @Html.LabelFor(model => model.Notes)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Notes, new { style = "width:500px; height:400px; overflow-y:scroll" })             
+            @Html.ValidationMessageFor(model => model.Notes)
+        </div>
+        
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
